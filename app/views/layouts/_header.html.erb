@@ -1,0 +1,27 @@
+<div class = "navbar-light">
+  
+  <div class = "logo-combined">
+    <span id = "logo">Cov</span><span id = "logo-mid"><b>INFO</b></span>
+  </div>
+  
+  <button id = "btn-hamburger-menu" onClick="showSideBar()"><%= image_tag 'meat-light.png'%></button>
+
+</div>
+
+<div id = "sidebar" class = "hidden">
+  <button id = "btn-hamburger-menu" onClick="showSideBar()"><%= image_tag 'close.png'%></button>
+</div>
+
+<script>
+  function showSideBar(){
+
+    let sidebar = document.getElementById("sidebar")
+    remove = 'hidden'
+    add = 'visible'
+    if(sidebar.classList.contains('visible'))
+      remove = 'visible', add = 'hidden'
+    
+    sidebar.classList.add(add)
+    sidebar.classList.remove(remove)
+  }
+</script>
