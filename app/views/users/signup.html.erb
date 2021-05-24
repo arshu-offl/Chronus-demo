@@ -1,0 +1,49 @@
+<% provide(:title, 'Sign Up!')%>
+<% provide(:page_type, 'signup')%>
+
+<div id = "signup-page">
+  <div id = "glass-container">
+    
+    <div id = "covinfo-view">
+      <%= image_tag('COVID-precautions.jpg')%>
+    </div>
+
+    <div id = "main-form">
+      <p> Registration Form </p>
+      <%= form_with(model: @user, local: true) do |form_field|%>
+        <p id = "errors">
+          <%if @user.errors.any?%>
+            <%= @user.errors.full_messages.first %>
+          <% else %>
+            <%= ' ' %>
+          <% end %>
+        </p>
+
+        <div>
+          <%= form_field.label :name %>
+          <%= form_field.text_field :name, class: 'form-control'%>
+        </div>
+
+        <div>
+          <%= form_field.label :email %>
+          <%= form_field.email_field :email, class: 'form-control'%>
+        </div>
+
+        <div>
+          <%= form_field.label :password%>
+          <%= form_field.password_field :password, class: 'form-control'%>
+        </div>
+
+        <div>
+          <%= form_field.label :password_confirmation, 'Confirm'%>
+          <%= form_field.password_field :password_confirmation, class: 'form-control'%>
+        </div>
+
+        <div id = "submit-btn-div">
+          <%= form_field.submit 'SIGN UP', id: 'submit-btn'%>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>

@@ -1,15 +1,31 @@
 <div class = "navbar-light">
   
-  <div class = "logo-combined">
-    <span id = "logo">Cov</span><span id = "logo-mid"><b>INFO</b></span>
+  <div id = "logo-combined">
+    <a href=<%= root_path %>><span id = "logo">Cov</span><span id = "logo-mid"><b>INFO</b></span></a>
   </div>
   
   <button id = "btn-hamburger-menu" onClick="showSideBar()"><%= image_tag 'meat-light.png'%></button>
 
 </div>
 
-<div id = "sidebar" class = "hidden">
-  <button id = "btn-hamburger-menu" onClick="showSideBar()"><%= image_tag 'close.png'%></button>
+<div id = "sidebar" class = "hidden" onClick = "handleClick(this)">
+  
+  <% if logged_in? %>
+    <div id = "profile-details">
+      <%= gravatar_for @user %>
+      <%= tag.p @user.name%>
+      <button id = "logout-btn"><a href=<%= logout_path %>>Logout</a></button>
+    </div>
+  <% end %>
+  
+  <div id = "menu-bar">
+    <button><a href=<%= root_path %>>Home</a></button>
+    <% if !logged_in? %>
+      <button><a href=<%= login_path %>>Login</a></button>
+      <button><a href=<%= signup_path %>>Sign up</a></button>
+    <% end %>
+  </div>
+
 </div>
 
 <script>
@@ -23,5 +39,15 @@
     
     sidebar.classList.add(add)
     sidebar.classList.remove(remove)
+  }
+
+  function handleClick(obj){
+
+    if(obj.classList.contains('hidden')){
+      showSideBar()
+      return 
+    }
+
+    // Do something else 
   }
 </script>

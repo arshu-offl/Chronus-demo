@@ -1,0 +1,137 @@
+$accent-color : #65dfc9;
+$accent-color2 : #6cdbeb;
+
+body{
+  background: linear-gradient(to left top, $accent-color, $accent-color2);
+  height: 100vh;
+}
+
+// Signup Page & Login page
+#signup-page, #login-page{
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  
+}
+
+#glass-container{
+
+  width: 80%;
+  display: flex;
+  border-radius: 2rem;
+
+  justify-content: center;
+  align-items: center;
+  margin: 130px 0 20px 0;
+  background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+
+  #covinfo-view{
+    flex: 1;
+
+    width: 100%;
+    height: 440px;
+    background: white;
+    border-radius: 2rem 0 0 2rem;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+
+    img{
+      height: 80%;
+      border-radius: 2rem;
+
+      &:hover{
+        border: 5px solid $accent-color;
+      }
+    }
+  }
+}
+
+#main-form{
+
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 2rem;
+  margin: 20px;
+  //background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3));
+  text-align: center;
+
+  div{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    margin: 20px 20px 20px 0;
+    padding: 2px;
+    
+    height: 30px;
+  }
+
+  label{    
+    margin-left: 30px;
+    float: left;
+    filter:invert(30%);
+  }
+
+  #errors{
+    font-size: 10px;
+    margin: 0;
+    color: red;
+  }
+
+  p{
+    font-size: 25px;
+    margin: 30px 0px 10px 0px;
+    filter:invert(40%);
+    font-weight: bold;
+  }
+
+  input{
+    margin-left: 30px;
+    height: 30px;
+    float: left;
+    clear: both;
+    width: 55%;
+
+    border: none;
+    border-radius: 3px;
+    text-indent: 10px;
+  }
+
+  #submit-btn-div{
+    justify-content: center;
+    margin: 50px 20px 30px 0px;
+    input[type=submit]{
+      
+      font-weight: bolder;
+      height: 40px;
+      color: white;
+      background: #114940;
+      width: 200px;
+      text-indent: 0px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+  } 
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+
+  #glass-container{
+    #covinfo-view{
+      flex: 0;
+      img{
+        display: none;
+      }
+    }
+  }
+}

@@ -2,12 +2,39 @@
 $main-font : 'Inter', sans-serif;
 $accent-color : #65dfc9;
 $accent-color2 : #6cdbeb;
+$btn-color1 : #7360D2;
 
 body{
   margin: 0;
   padding: 0;
   font-family: $main-font;
   overflow-x: hidden;
+}
+
+@mixin side-bar-btn {
+  button{
+    margin-top: 3px;
+    background: none;
+    border: none;
+    border-radius: 2rem;      
+    padding: 10px 20px 10px 20px;
+
+    a{
+      text-decoration: none;
+      color: black;
+      font-weight: bolder;
+    }
+
+    &:hover{
+      cursor: pointer;
+      transition-duration: 0.3s;
+      background: $btn-color1;
+
+      a{
+        color: white;
+      }
+    }
+  }
 }
 
 @mixin icon-btn{
@@ -32,23 +59,121 @@ body{
 
 .navbar-light{
   width: 100%;
-  background: white;
+  position: fixed;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   //border-bottom: 1px solid rgb(212, 211, 211);
   font-size: 40px;
   padding: 10px;
   display: flex;
   flex-direction: row;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 
   @include icon-btn;
+
+  a{
+    text-decoration: none;
+  }
+  
 }
 
+#logo-combined{
+  display: flex;
+  flex: 2;
+
+  justify-content: center;  
+}
 #logo{
   color:black;
+  filter: invert(10%);
 }
 
 #logo-mid{
-  color: green;
+  color: rgb(3, 99, 3);
 }
+
+// Side Bar
+#sidebar{
+  //height: 80vh;
+  width: 300px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3));
+  float: right;
+  position: absolute;
+  right: 0;
+  transition-duration: 0.2s;
+  border-radius: 20px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 80px;
+
+  #profile-details{
+
+    margin-top: 40px;
+    background: rgb(255, 249, 249);
+    width: 150px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 2rem;
+    
+    img{
+      border-radius: 50%;
+    }
+    p{
+      font-size: 20px;
+    }
+  
+  }
+
+  @include side-bar-btn;
+
+  #menu-bar{
+    margin-top: 30px;
+    margin-bottom: 10px;
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+  
+    align-items: center;
+
+    button{
+      border-radius: 0.3rem;
+      font-size: 15px;
+      background: none;
+      width: 40%;   
+      margin-bottom: 30px;
+    
+      a{
+        color: black;
+        filter: invert(30%);
+      }
+
+      &:hover{
+        background: $btn-color1;
+        transition-duration: 0.4s;
+        a{
+          color: white;
+          filter: invert(0%);
+        }
+      }
+    }
+  }
+}
+
+.hidden{
+  transform: translateX(300px);
+  margin-right: 20px;
+}
+
+.visible{
+  transform: translateX(0px);
+  margin-right: 20px;
+} 
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
@@ -56,49 +181,13 @@ body{
     align-items: center;
     justify-content: center;
   }
-}
 
-// Side Bar
-#sidebar{
-  height: 100vh;
-  width: 500px;
-  background: white;
-  float: right;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transition-duration: 0.2s;
-  border-radius: 20px 0 0 20px;
-  border: 1px solid #e2e2e2;
-
-  @include icon-btn;
-  button{
-    float: right;
-    margin: 30px;
-    border-radius: 50%;
-    border: 3px solid $accent-color2;
-    height: 40px;
-    width: 40px;
-
-    img{
-      height: 20px;
-      filter: invert(30%);
-    }
-
-    &:hover{
-      background: $accent-color;
-
-      img{
-        filter: invert(100%);
-      }
-    }
+  #sidebar{
+    margin: 0;
+    width: 400px;
+  }
+  
+  .hidden{
+    transform: translateX(400px);
   }
 }
-
-.hidden{
-  transform: translateX(500px);
-}
-
-.visible{
-  transform: translateX(0px);
-} 
