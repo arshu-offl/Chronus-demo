@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_23_081052) do
+ActiveRecord::Schema.define(version: 2021_05_25_054910) do
+
+  create_table "covid_cases", force: :cascade do |t|
+    t.string "Location"
+    t.date "Date"
+    t.string "No_of_cases"
+    t.string "No_of_deaths"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "No_of_recovered"
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id"

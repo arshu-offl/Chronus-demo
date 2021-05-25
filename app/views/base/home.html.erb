@@ -1,2 +1,140 @@
 <% provide(:title, 'Home') %>
-<% provide(:page_type, 'home')%>
+<% provide(:page_type, 'home') %>
+
+<% if params[:location].nil? %>
+  <% params[:location] = 'India'
+     params[:date_from] = '2021-05-14'
+     params[:date_to] = '2021-05-21'%>
+<% end %>
+
+<% stats = getSummaryData(params) %>
+<% jspass = []%>
+
+<div id = "main-wrapper">
+  <div id = "summary-statistics">  
+    <div id = "filters">
+    
+      <%= form_with url: filter_path, method: :post do |form| %>
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%= form.text_field 'location', id: 'location-filter', :placeholder => 'Location', :value => params[:location] %>
+        <%= form.date_field 'date_from', id: 'date-from-filter', value: params[:date_from] %>
+        <%= form.date_field 'date_to', id: 'date-to-filter', value: params[:date_to] %>
+        <%= form.submit 'Filter', id: 'submit-filter-btn'%>
+      <% end %>
+
+    </div>
+
+    <div id = "stats">
+      <% if !stats[0].nil? %>
+        <%# Make Filter bar go red %>
+        <script> document.getElementById("filters").style.border = "none" </script>
+        <% sum_cases = 0 %>
+        <% sum_deaths = 0 %>
+        <% sum_recovered = 0 %>
+        <% stats.each_with_index do |stat, idx| %>
+
+          <% if idx == 0 %>
+            <% next %>
+          <% end %>
+
+          <% if stat%>
+            <% jspass << [ stat[:Date].strftime("%Y/%m/%d"), stat[:No_of_cases].to_i, stat[:No_of_recovered].to_i, stat[:No_of_deaths].to_i ] %>
+            <% sum_cases += stat[:No_of_cases].to_i - stats[idx - 1][:No_of_cases].to_i %>
+            <% sum_deaths += stat[:No_of_deaths].to_i - stats[idx - 1][:No_of_deaths].to_i %>
+            <% sum_recovered += stat[:No_of_recovered].to_i  - stats[idx - 1][:No_of_recovered].to_i %>
+          <% end %>
+
+        <% end %>
+
+      <% end %>
+
+      <div id = "stats-cases">
+        <p>No of new Cases</p>
+        <% if !stats[0].nil? %>
+          <%= number_with_delimiter(sum_cases, :delimiter => ',') %>
+        <% else %>
+          <%# Make Filter bar go red %>
+          <script> document.getElementById("filters").style.border = "3px solid red" </script>
+          <%= 0 %>
+        <% end %>
+      </div>
+
+      <div id = "stats-recovered">
+        <p>No of Recovered</p>
+        <% if !stats[0].nil? %>
+          <%= number_with_delimiter(sum_recovered, :delimiter => ',') %>
+        <% else %>
+          <%= 0 %>
+        <% end %>
+      </div>
+
+      <div id = "stats-deaths">
+        <p>No of Deaths</p>
+        <% if !stats[0].nil? %>
+          <%= number_with_delimiter(sum_deaths, :delimiter => ',') %>
+        <% else %>
+          <%= 0 %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <div id = "graphs">
+      <%# No of cases graph %>
+
+      <% if !stats[0].nil? %>
+        <div id = "graphs-0">
+        </div>
+
+        <div id = "graphs-1">
+        </div>
+        
+        <div id = "graphs-2">
+        </div>
+        
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if !stats[0].nil?%>
+  <script>
+    var stats = []
+    var headings = ['Cases', 'Recovered', 'Deaths']
+
+    <% [1, 2, 3].each do |idx| %>
+      temp = []
+      temp.push([ 'Date', headings[<%=idx - 1%>] ])
+      <% jspass.each do |row| %>
+        temp.push([<%= row[0].inspect.html_safe%>, <%= row[idx].inspect.html_safe%>])
+      <% end %>
+      stats.push(temp)
+    <% end %>
+
+    console.log(stats)
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      colors = ['blue', 'green', 'red']
+      for(let i = 0; i < stats.length; i++){
+      
+        var data = google.visualization.arrayToDataTable(stats[i]);
+
+        var options = {
+          title: headings[i],
+          curveType: 'function',
+          legend: 'none',
+          colors: [colors[i]],
+          hAxis: { textPosition: 'none', visible: false },
+          vAxis: { textPosition: 'none', gridlines: {color: 'transparent'} },
+          chartArea: {width: '94%'},
+        };
+
+        var chart1 = new google.visualization.LineChart(document.getElementById('graphs-' + i));
+        chart1.draw(data, options);
+      }
+    }
+  </script>
+<% end %>

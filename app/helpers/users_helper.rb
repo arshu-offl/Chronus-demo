@@ -12,6 +12,12 @@ module UsersHelper
   def logged_in?
     if(cookies.signed[:login_token]) 
       @session = Session.find_by(:session_hash => cookies.signed[:login_token])
+      
+      if !@session
+        cookies.delete :login_token
+        return false
+      end
+      
       @user = User.find(@session.user_id)
       return true
     else
