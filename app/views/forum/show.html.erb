@@ -1,0 +1,97 @@
+<% provide(:title, 'Forum') %>
+
+<button id = "create" onClick="showCreateBar()" ><%= image_tag('create.png') %></button>
+
+<div id = "create-bar" class = "hide-create">
+  <div id = "btn-wrap">
+    <button onClick="showCreateBar()" ><%= image_tag('close.png') %></button>
+  </div>
+
+  <%= form_with url: forum_path, method: :post do |form| %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= form.text_area 'content', id: 'post-content', :placeholder => 'Write Something!', :value => params[:location] %>
+    <%= form.text_field 'hashtag', id: 'hash-tag', :placeholder => '#Hashtag', :value => params[:location] %>
+    <%= form.submit 'Create Post', id: 'create-post-btn'%>
+  <% end %>
+</div>
+
+<div id = "forum-wrapper">
+  
+  <div id = "forum-bar">
+    
+    <div id = "trending-display">
+      <div id = "hashtags">
+        <p id = "title">Trending</p>
+        <button onClick = "window.location.replace('<%= forum_path %>')">Clear Filters</button>
+        <% @trending.each do |trend| %>
+          <p onClick = "httpGET('hashtag=<%= trend[0] %>', 0)">#<%= trend[0] %></p>
+        <% end %>
+      </div>
+
+      <div id = "upvotes-filter"> 
+        <button onClick = "httpGET('upvote=true', 0)">Filter by upvotes</button>
+      </div>
+    </div>
+
+    <div id = "posts-display">
+
+      <% @posts.each do |post| %>
+        <div class = "post">
+          <div id = "content">
+            <h1 onClick = "httpGET('userid=<%= post.User_id %>', 0)">u/<%= User.find(post.User_id).name %></h1>
+            <p><%= post.Content %></p>
+
+            <% if !post.Hash_Tag.nil?%>
+              <div class = "tag" onClick = "httpGET('hashtag=<%= post.Hash_Tag %>', 0)">
+                #<%= post.Hash_Tag %>
+              </div>
+            <% end %>
+          </div>
+
+          <div id = "options">
+            <div>
+              <span><%= Upvote.where("post_id == #{post.id}").count %></span>
+              <% not_upvoted = Upvote.where("user_id == #{@user.id} and post_id == #{post.id}")[0].nil? %>
+              <button id = "upvote" onClick = "httpGET('upvote=true&post_id=<%= post.id %>', 0)" class = <%= not_upvoted ? "" : "upvoted" %>><%= not_upvoted  ? "Upvote" : "Downvote" %></button>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      
+      <div id = "page-navigator">
+        <button id = "previous-btn" onClick = "httpGET(getOtherParams(), <%= params[:offset].nil? ? 0 : params[:offset].to_i - 1 %>)" class = "<%= (!params[:offset].nil? && params[:offset].to_i != 0) ? "enabled" : "disabled" %>" >Previous</button>
+        <button id = "next-btn" onClick = "httpGET(getOtherParams(), <%= params[:offset].nil? ? 1 : params[:offset].to_i + 1 %>)" class = <%= @posts.length == 3 ? 'enabled' : 'disabled'%> >Next</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<script>
+  function showCreateBar(){
+
+    let sidebar = document.getElementById("create-bar")
+    remove = 'hide-create'
+    add = 'unhide-create'
+    if(sidebar.classList.contains('unhide-create'))
+      remove = 'unhide-create', add = 'hide-create'
+    
+    sidebar.classList.add(add)
+    sidebar.classList.remove(remove)
+  }
+
+  function httpGET(value = '', offset = 0)
+  { 
+    window.location.replace('<%= forum_path %>' + '?'+ value + (value.length && value[value.length - 1] != '&' ? '&' : '') + 'offset=' + offset)
+  }
+  
+  function getOtherParams(){
+
+    s = window.location.href
+    if(s.indexOf("?") == -1)
+      return ''
+    
+    return s.substr(s.indexOf("?") + 1, s.indexOf("offset") - s.indexOf("?") - 1)
+  }
+</script>

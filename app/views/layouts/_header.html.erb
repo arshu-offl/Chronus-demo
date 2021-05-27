@@ -23,6 +23,8 @@
     <% if !logged_in? %>
       <button><a href=<%= login_path %>>Login</a></button>
       <button><a href=<%= signup_path %>>Sign up</a></button>
+    <% else %>
+      <button><a href=<%= forum_path %>>Forum</a></button>
     <% end %>
   </div>
 

@@ -34,7 +34,6 @@ module BaseHelper
       end
     end
     
-    p @data
     @data 
   end
 end

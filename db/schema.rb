@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_054910) do
+ActiveRecord::Schema.define(version: 2021_05_26_124854) do
 
   create_table "covid_cases", force: :cascade do |t|
     t.string "Location"
@@ -22,11 +22,27 @@ ActiveRecord::Schema.define(version: 2021_05_25_054910) do
     t.string "No_of_recovered"
   end
 
+  create_table "forum_posts", force: :cascade do |t|
+    t.string "Content"
+    t.integer "User_id"
+    t.string "Hash_Tag"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id"
     t.string "session_hash"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "upvotes", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id", "post_id"], name: "index_upvotes_on_user_id_and_post_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
