@@ -41,7 +41,8 @@
     justify-content: space-evenly;
     width: 100%;
   }
-  input[type=text], input[type=date]{
+  
+  select, input[type=date]{
 
     height: 30px;
     border-radius: 10px;
@@ -50,6 +51,9 @@
     border: 0.3px solid rgb(207, 207, 207);
   }
 
+  select{
+    background: white;
+  }
   input[type=submit]{
     
     width: 160px;
@@ -116,7 +120,7 @@
     form{
       flex-direction: column;
     }
-    input[type=text], [type=date]{
+    select, [type=date]{
       height: 30px;
       margin-bottom: 10px;
     }

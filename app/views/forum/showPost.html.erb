@@ -1,0 +1,96 @@
+<% provide(:title, 'Forum') %>
+<% current_user = User.find(@current_post.User_id) %>
+
+<div id = "forum-wrapper">
+  
+  <div id = "forum-bar">
+    
+    <div id = "trending-display">
+      <% if current_user %>
+        <div id = "Account-info">
+          <%= gravatar_for current_user %>
+          <%= tag.p current_user.name%>
+        
+        <%if @user.id == current_user.id %>
+          <button id = "logout-btn"><a href=<%= logout_path %>>Logout</a></button>
+        <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id = "posts-display">
+      <% post = @current_post %>
+      <div class = "post">
+        <div id = "content">
+          <h1 onClick = "httpGET(this, 'userid=<%= post.User_id %>', 0)">u/<%= User.find(post.User_id).name %></h1>
+          <p><%= post.Content %></p>
+
+          <% if !post.Hash_Tag.nil?%>
+            <div class = "tag">
+              #<%= post.Hash_Tag %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div id = "thread-display">
+        <% @comments.each do |comment|%>
+          <div id = "content">
+            <div id = "comment-bar">
+              <h1 onClick = "httpGET(this, 'userid=<%= comment.user_id %>', 0)">u/<%= User.find(comment.user_id).name %></h1>
+              <% if post.User_id == @user.id || comment.user_id == @user.id %>
+                <button onClick = "httpGET(this, 'post_id=<%= post.id %>&comment_id=<%= comment.id %>', 0)">Delete</button>
+              <% end %>
+            </div>
+            <p><%= comment.content %></p>
+          </div>
+        <% end %>
+
+        <div id = "page-navigator">
+          <button id = "previous-btn" onClick = "httpGET(this, getOtherParams(), <%= params[:offset].nil? ? 0 : params[:offset].to_i - 1 %>)" class = "<%= (!params[:offset].nil? && params[:offset].to_i != 0) ? "enabled" : "disabled" %>" >Previous</button>
+          <button id = "next-btn" onClick = "httpGET(this, getOtherParams(), <%= params[:offset].nil? ? 1 : params[:offset].to_i + 1 %>)" class = <%= @comments.length == 3 ? 'enabled' : 'disabled'%> >Next</button>
+        </div>
+      </div>
+
+      <div id = "post-display">
+        <%= form_with url: forum_path, method: :post do |form| %>
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <%= form.hidden_field :post_id, value: @current_post.id %>
+          <%= form.text_area 'comment_content', id: 'comment-content', :placeholder => 'Write Something!', :value => params[:location] %>
+          <%= form.submit 'Post Comment', id: 'create-comment-btn'%>
+        <% end %>
+      </div>  
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function showCreateBar(){
+
+    let sidebar = document.getElementById("create-bar")
+    remove = 'hide-create'
+    add = 'unhide-create'
+    if(sidebar.classList.contains('unhide-create'))
+      remove = 'unhide-create', add = 'hide-create'
+    
+    sidebar.classList.add(add)
+    sidebar.classList.remove(remove)
+  }
+
+  function httpGET(obj, value = '', offset = 0)
+  { 
+    if(obj.classList.contains("disabled"))
+      return 
+    window.location.replace('<%= forum_path %>' + '?'+ value + (value.length && value[value.length - 1] != '&' ? '&' : '') + 'offset=' + offset)
+  }
+  
+  function getOtherParams(){
+
+    s = window.location.href
+    if(s.indexOf("?") == -1)
+      return ''
+    
+    return s.substr(s.indexOf("?") + 1, s.indexOf("offset") - s.indexOf("?") - 1)
+  }
+</script>

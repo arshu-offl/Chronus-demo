@@ -24,44 +24,48 @@
         <p id = "title">Trending</p>
         <button onClick = "window.location.replace('<%= forum_path %>')">Clear Filters</button>
         <% @trending.each do |trend| %>
-          <p onClick = "httpGET('hashtag=<%= trend[0] %>', 0)">#<%= trend[0] %></p>
+          <p onClick = "httpGET(this, 'hashtag=<%= trend[0] %>', 0)">#<%= trend[0] %></p>
         <% end %>
       </div>
 
       <div id = "upvotes-filter"> 
-        <button onClick = "httpGET('upvote=true', 0)">Filter by upvotes</button>
+        <button onClick = "httpGET(this, 'upvote=true', 0)">Filter by upvotes</button>
       </div>
     </div>
 
     <div id = "posts-display">
 
-      <% @posts.each do |post| %>
-        <div class = "post">
-          <div id = "content">
-            <h1 onClick = "httpGET('userid=<%= post.User_id %>', 0)">u/<%= User.find(post.User_id).name %></h1>
-            <p><%= post.Content %></p>
+      <% if @posts %>
+        <% @posts.each do |post| %>
+          <div class = "post" onClick = "httpGET(this, 'post_id=<%= post.id %>', 0)">
+            <div id = "content">
+              <h1 onClick = "httpGET(this, 'userid=<%= post.User_id %>', 0); event.stopPropagation();">u/<%= User.find(post.User_id).name %></h1>
+              <p><%= post.Content %></p>
 
-            <% if !post.Hash_Tag.nil?%>
-              <div class = "tag" onClick = "httpGET('hashtag=<%= post.Hash_Tag %>', 0)">
-                #<%= post.Hash_Tag %>
+              <% if !post.Hash_Tag.nil?%>
+                <div class = "tag" onClick = "httpGET(this, 'hashtag=<%= post.Hash_Tag %>', 0); event.stopPropagation();">
+                  #<%= post.Hash_Tag %>
+                </div>
+              <% end %>
+            </div>
+
+            <div id = "options">
+              <div>
+                <span><%= Upvote.where("post_id == #{post.id}").count %></span>
+                <% not_upvoted = Upvote.where("user_id == #{@user.id} and post_id == #{post.id}")[0].nil? %>
+                <button id = "upvote" onClick = "httpGET(this, 'upvote=true&post_id=<%= post.id %>', 0); event.stopPropagation();" class = <%= not_upvoted ? "" : "upvoted" %>><%= not_upvoted  ? "Upvote" : "Downvote" %></button>
               </div>
-            <% end %>
-          </div>
-
-          <div id = "options">
-            <div>
-              <span><%= Upvote.where("post_id == #{post.id}").count %></span>
-              <% not_upvoted = Upvote.where("user_id == #{@user.id} and post_id == #{post.id}")[0].nil? %>
-              <button id = "upvote" onClick = "httpGET('upvote=true&post_id=<%= post.id %>', 0)" class = <%= not_upvoted ? "" : "upvoted" %>><%= not_upvoted  ? "Upvote" : "Downvote" %></button>
             </div>
           </div>
-        </div>
-      <% end %>
+        <% end %>
       
       <div id = "page-navigator">
-        <button id = "previous-btn" onClick = "httpGET(getOtherParams(), <%= params[:offset].nil? ? 0 : params[:offset].to_i - 1 %>)" class = "<%= (!params[:offset].nil? && params[:offset].to_i != 0) ? "enabled" : "disabled" %>" >Previous</button>
-        <button id = "next-btn" onClick = "httpGET(getOtherParams(), <%= params[:offset].nil? ? 1 : params[:offset].to_i + 1 %>)" class = <%= @posts.length == 3 ? 'enabled' : 'disabled'%> >Next</button>
+        <button id = "previous-btn" onClick = "httpGET(this, getOtherParams(), <%= params[:offset].nil? ? 0 : params[:offset].to_i - 1 %>)" class = "<%= (!params[:offset].nil? && params[:offset].to_i != 0) ? "enabled" : "disabled" %>" >Previous</button>
+        <button id = "next-btn" onClick = "httpGET(this, getOtherParams(), <%= params[:offset].nil? ? 1 : params[:offset].to_i + 1 %>)" class = <%= @posts.length == 3 ? 'enabled' : 'disabled'%> >Next</button>
       </div>
+      <% else %>
+        <p id = "no-content"> No posts to show </p>
+      <% end %>
     </div>
     
   </div>
@@ -81,8 +85,10 @@
     sidebar.classList.remove(remove)
   }
 
-  function httpGET(value = '', offset = 0)
+  function httpGET(obj, value = '', offset = 0)
   { 
+    if(obj.classList.contains("disabled"))
+      return 
     window.location.replace('<%= forum_path %>' + '?'+ value + (value.length && value[value.length - 1] != '&' ? '&' : '') + 'offset=' + offset)
   }
   

@@ -13,7 +13,7 @@
   width: 80%;
   background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
   height: 80%;
-  margin-top: 25px;
+  margin-top: 70px;
   border-radius: 2rem;
 
   display: flex;
@@ -110,6 +110,7 @@
     justify-content: space-between;
     padding: 10px 20px 10px 30px;
     margin-bottom: 20px;
+    cursor: pointer;
   }
 
   #content{
@@ -170,7 +171,7 @@
 #create-bar{
 
   position: fixed;
-  margin-top: 70px;
+  margin-top: 95px;
   display: flex;
   flex-direction: column;
 
@@ -247,7 +248,7 @@
 #create{
 
   position: fixed;
-  margin: 73px 0 0 20px;
+  margin: 100px 0 0 20px;
   cursor: pointer;
   background: rgba(2, 2, 167, 0.5); 
   border: none;
@@ -314,4 +315,76 @@
   color: white;
   background:rgb(3, 3, 95);
   cursor: pointer;
+}
+
+#post-display{
+  width: 100%;
+  border-radius: 2rem;
+  border: 1px solid rgb(201, 201, 201);
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px 0 20px 0;
+  align-items: center;
+  margin-bottom: 20px;
+  
+  #comment-content{
+    height: 30px;
+    width: 100%;
+    text-indent: 10px;
+  }
+
+  input[type=submit]{
+    padding: 0px 10px 0 10px;
+    height: 30px;
+    border: none;
+    border-radius: 2rem;
+    background:rgba(2, 2, 167, 0.5);
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    &:hover{
+      background:rgba(2, 2, 167, 1);
+    }
+  }
+}
+
+
+#thread-display{
+
+  border: 1px solid rgb(206, 206, 206);
+  border-radius: 2rem;
+  margin-bottom: 20px;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+  h1, p, #page-navigator{
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  #page-navigator{
+    margin-top: 20px;
+  }
+
+  p{
+    border-bottom: 2px solid rgb(235, 232, 232);
+  }
+}
+
+#comment-bar{
+
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  button{
+    margin-right: 30px;
+    border: none;
+    background: red;
+    color: white;
+    font-weight: bolder;
+    border-radius: 3px;
+    cursor: pointer;
+  }
 }

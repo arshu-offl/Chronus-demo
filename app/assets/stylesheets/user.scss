@@ -135,3 +135,108 @@ body{
     }
   }
 }
+
+#Account-info{
+  
+  border-radius: 2rem;
+  margin: 40px 20px 40px 20px;
+  text-align: center;
+  min-width: 80%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px 10px 20px 10px;
+
+  #user-name{
+    font-weight: bold;
+    color: rgb(4, 21, 71);
+  }
+
+  img{
+    border-radius: 50%;
+  }
+
+  button{
+    a{
+      text-decoration: none;
+      color: white;
+    }
+  }
+}
+
+#no-content{
+
+  align-self: center;
+  color:rgb(4, 21, 71);
+}
+
+#delete{
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px 20px 10px 20px;
+  font-weight: bold;
+  border-radius: 2rem;   
+}
+
+#search-bar{
+
+  width: 100%;
+  // background: black;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  input[type=text]{
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid rgb(202, 202, 202);
+    width: 50%;
+    text-indent: 10px;
+  }
+
+  button{
+    width: 15%;
+    height: 30px;
+    border-radius: 10px;
+    background: rgb(4, 21, 71);
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 30px;
+  }
+}
+
+#users-display{
+  margin: 20px;
+}
+
+#Account-show{
+  margin: 30px 50px 30px 50px;
+  border: 1px solid rgb(235, 233, 233);
+  display: flex;
+  max-width: fit-content;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 20px 20px 20px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+
+  img{
+    border-radius: 50%;
+    border:3px solid white;
+  }
+
+  p{
+    font-weight: bold;
+    margin-left: 20px;
+  }
+
+  &:hover{
+    background: rgb(78, 122, 255);
+    color: white;
+  }
+}

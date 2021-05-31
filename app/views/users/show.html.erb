@@ -1,0 +1,85 @@
+<% provide(:title, "Account")%>
+<% current_user = User.find(params[:id]) %>
+
+<div id = "forum-wrapper">
+  <div id = "forum-bar">
+
+    <div id = "trending-display" >
+      <% if current_user %>
+        <div id = "Account-info">
+          <%= gravatar_for current_user %>
+          <%= tag.p current_user.name%>
+        
+        <%if @user.id == current_user.id %>
+          <button id = "logout-btn"><a href=<%= logout_path %>>Logout</a></button>
+        <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id = "posts-display">
+      <% if @posts %>
+        <% @posts.each do |post| %>
+          <div class = "post">
+            <div id = "content">
+              <h1>u/<%= User.find(post.User_id).name %></h1>
+              <p><%= post.Content %></p>
+
+              <% if !post.Hash_Tag.nil?%>
+                <div class = "tag">
+                  #<%= post.Hash_Tag %>
+                </div>
+              <% end %>
+            </div>
+
+            <div id = "options">
+              <div>
+                <%if @user.id == current_user.id %>
+                  <button id = "delete" onClick = "httpGET(this, 'delete=true&post_id=<%= post.id %>', 0)"%>Delete</button>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      
+      <div id = "page-navigator">
+        <button id = "previous-btn" onClick = "httpGET(this, getOtherParams(), <%= params[:offset].nil? ? 0 : params[:offset].to_i - 1 %>)" class = "<%= (!params[:offset].nil? && params[:offset].to_i != 0) ? "enabled" : "disabled" %>" >Previous</button>
+        <button id = "next-btn" onClick = "httpGET(this, getOtherParams(), <%= params[:offset].nil? ? 1 : params[:offset].to_i + 1 %>)" class = <%= @posts.length == 3 ? 'enabled' : 'disabled'%> >Next</button>
+      </div>
+      <% else %>
+        <p id = "no-content"> No posts to show </p>
+      <% end %>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showCreateBar(){
+
+    let sidebar = document.getElementById("create-bar")
+    remove = 'hide-create'
+    add = 'unhide-create'
+    if(sidebar.classList.contains('unhide-create'))
+      remove = 'unhide-create', add = 'hide-create'
+    
+    sidebar.classList.add(add)
+    sidebar.classList.remove(remove)
+  }
+
+  function httpGET(obj, value = '', offset = 0)
+  { 
+    if(obj.classList.contains("disabled"))
+      return 
+    window.location.replace(window.location.origin + window.location.pathname + '?'+ value + (value.length && value[value.length - 1] != '&' ? '&' : '') + 'offset=' + offset)
+  }
+  
+  function getOtherParams(){
+
+    s = window.location.href
+    if(s.indexOf("?") == -1)
+      return ''
+    
+    return s.substr(s.indexOf("?") + 1, s.indexOf("offset") - s.indexOf("?") - 1)
+  }
+</script>

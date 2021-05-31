@@ -3,7 +3,7 @@
 
 <% if params[:location].nil? %>
   <% params[:location] = 'India'
-     params[:date_from] = '2021-05-14'
+     params[:date_from] = '2021-04-14'
      params[:date_to] = '2021-05-21'%>
 <% end %>
 
@@ -16,9 +16,9 @@
     
       <%= form_with url: filter_path, method: :post do |form| %>
         <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-        <%= form.text_field 'location', id: 'location-filter', :placeholder => 'Location', :value => params[:location] %>
-        <%= form.date_field 'date_from', id: 'date-from-filter', value: params[:date_from] %>
-        <%= form.date_field 'date_to', id: 'date-to-filter', value: params[:date_to] %>
+        <%= form.select 'location', options_for_select(@Unique_Locations, :selected => params[:location]) , id: 'location-filter', :placeholder => 'Location', :value => params[:location] %>
+        <%= form.date_field 'date_from', id: 'date-from-filter', value: params[:date_from], min: "2020-01-01", max: Date.current%>
+        <%= form.date_field 'date_to', id: 'date-to-filter', value: params[:date_to], min: "2020-01-01", max: Date.current%>
         <%= form.submit 'Filter', id: 'submit-filter-btn'%>
       <% end %>
 

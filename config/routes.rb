@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   get '/logout', to: 'sessions#destroy'
   get '/forum', to: 'forum#show'
   post '/forum', to: 'forum#create'
+  get '/showPost', to: 'forum#showPost'
   resources :users
 end
